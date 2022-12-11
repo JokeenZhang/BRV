@@ -25,6 +25,7 @@ import com.drake.brv.sample.model.Model
 import com.drake.brv.sample.model.ThreeSpanModel
 import com.drake.brv.sample.model.TwoSpanModel
 import com.drake.brv.utils.bindingAdapter
+import com.drake.brv.utils.grid
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import com.drake.engine.base.EngineFragment
@@ -53,13 +54,20 @@ class MultiTypeFragment : EngineFragment<FragmentMultiTypeBinding>(R.layout.frag
 
                     R.layout.item_multi_type_three_span -> {
                         val model = getModel<ThreeSpanModel>()
-                        getBinding<ItemMultiTypeThreeSpanBinding>().rvThree.linear().setup {
+                        val rvThree = getBinding<ItemMultiTypeThreeSpanBinding>().rvThree
+                        rvThree.grid(2).setup {
                             addType<String>(R.layout.item_multi_type_simple)
                             onBind {
-                                getBinding<ItemMultiTypeSimpleBinding>().tvName.text =
+                                val itemBinding = getBinding<ItemMultiTypeSimpleBinding>()
+                                itemBinding.item.background =
+                                    ContextCompat.getDrawable(context, R.color.dividerDecoration)
+                                itemBinding.tvName.text =
                                     getModel<String>()
                             }
                         }.models = model.list
+                        rvThree.bindingAdapter.onClick(R.id.item) {
+                            toast("类型3")
+                        }
 
                     }
                 }
